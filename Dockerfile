@@ -41,12 +41,6 @@ RUN rpm -ivh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch
     python-setuptools && \
     yum clean all
     
-RUN pecl install mongo
-RUN echo "extension=mongodb.so" >> /etc/php.ini
-
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-
 #Add user
 RUN groupadd -r www && \
     useradd -M -s /sbin/nologin -r -g www www
@@ -143,6 +137,12 @@ ADD php.ini /usr/local/php/etc/php.ini
 RUN ln -s /usr/local/php/bin/php /usr/bin/php
 
 RUN curl -s http://getcomposer.org/installer | php && mv ./composer.phar /usr/local/bin/composer
+
+RUN pecl install mongo
+RUN echo "extension=mongodb.so" >> /etc/php.ini
+
+# RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+# RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
 #Install supervisor
 RUN easy_install supervisor && \
