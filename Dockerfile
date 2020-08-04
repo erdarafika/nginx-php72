@@ -12,6 +12,11 @@ RUN yum install -y gcc \
     make \
     cronie \
     unzip \
+    php-pear \ 
+    php-devel \
+    php-cli \ 
+    php-zip \ 
+    wget \
     cmake && \
     yum clean all
 
@@ -35,6 +40,12 @@ RUN rpm -ivh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch
     openssh-server \
     python-setuptools && \
     yum clean all
+    
+RUN pecl install mongo
+RUN echo "extension=mongodb.so" >> /etc/php.ini
+
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
 #Add user
 RUN groupadd -r www && \
